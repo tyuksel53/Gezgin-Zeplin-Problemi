@@ -1,7 +1,4 @@
-import MyJFrame.EkraniOlustur;
-
-import javax.swing.*;
-import java.awt.*;
+import Ekran.EkraniOlustur;
 
 public class Main {
 
