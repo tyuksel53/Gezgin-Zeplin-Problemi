@@ -4,7 +4,9 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 public class Harita extends JPanel {
@@ -22,11 +24,11 @@ public class Harita extends JPanel {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
+        g.drawImage(buffImg, 10, 39, null);
         //TODO: Burda yol çizdirilecek
 
-        /*g.setColor(Color.red);
-        g.drawImage(buffImg, 10, 39, null);
+       /* g.setColor(Color.red);
+
         try (BufferedReader br = new BufferedReader(new FileReader("harita-kordinatlar.txt"))) {
 
             String sCurrentLine;

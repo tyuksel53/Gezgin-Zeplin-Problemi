@@ -87,6 +87,7 @@ public class Portal {
         return dugumler;
     }
 
+
     public double mesafeyiBul(double lat1, double lon1, double lat2, double lon2) {
         double theta = lon1 - lon2;
         double mesafe = Math.sin(derece_radyana(lat1)) * Math.sin(derece_radyana(lat2))
