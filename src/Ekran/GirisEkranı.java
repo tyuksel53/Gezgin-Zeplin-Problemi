@@ -75,8 +75,9 @@ public class GirisEkranı extends JFrame {
                 grafDugumler.get(i).setKomsularVeDegerleri(grafDugumler,yolcuSayisi);
             }
             PathFinder findMyPath = new PathFinder(grafDugumler);
-            findMyPath.yolu_bul(baslangicPlaka,bitisPlaka);
-            new YoluGoster("Optimal 1",baslangicPlaka,bitisPlaka);
+            ArrayList<Node> yol = findMyPath.yolu_bul(baslangicPlaka,bitisPlaka);
+            yol.add(grafDugumler.get(baslangicPlaka -1));
+            new YoluGoster("Optimal 1",baslangicPlaka,bitisPlaka,yol);
         });
 
 
