@@ -57,32 +57,45 @@ public class GirisEkranı extends JFrame {
         JTextField tfBitisPlaka = new JTextField();
         tfBitisPlaka.setBounds(25,130,175,30);
 
-        JLabel lbYolcu = new JLabel("Yolcu sayisini girin:");
+/*        JLabel lbYolcu = new JLabel("Yolcu sayisini girin:");
         lbYolcu.setBounds(25,170,200,50);
 
         JTextField tfYolcuSayisi = new JTextField();
-        tfYolcuSayisi.setBounds(25,210,175,30);
+        tfYolcuSayisi.setBounds(25,210,175,30);*/
 
         btnHesapla.addActionListener(e -> {
             int baslangicPlaka = Integer.parseInt( tfBaslangicPlaka.getText() );
             int bitisPlaka = Integer.parseInt( tfBitisPlaka.getText() );
-            int yolcuSayisi = Integer.parseInt(tfYolcuSayisi.getText());
+            /*int yolcuSayisi = Integer.parseInt(tfYolcuSayisi.getText());*/
             ArrayList<Node> grafDugumler = new ArrayList<>();
 
             grafDugumler = Portal.getInstance().dogumleriTanimla();
-            for(int i=0;i<grafDugumler.size();i++)
+            for(int yolcuSayisi=5;yolcuSayisi<50;yolcuSayisi++)
             {
-                grafDugumler.get(i).setKomsularVeDegerleri(grafDugumler,yolcuSayisi);
+                for(int i=0;i<grafDugumler.size();i++)
+                {
+                    grafDugumler.get(i).setKomsularVeDegerleri(grafDugumler,yolcuSayisi);
+                }
+                PathFinder findMyPath = new PathFinder(grafDugumler);
+                ArrayList<Node> yol = findMyPath.yolu_bul(baslangicPlaka,bitisPlaka);
+                if(yol.size() != 0)
+                {
+                    double tutar = (findMyPath.gidilenMesafe(bitisPlaka) / 100) * 1000;
+                    double kar = yolcuSayisi * 20 - tutar;
+                    yol.add(grafDugumler.get(baslangicPlaka -1));
+                    new YoluGoster(""+yolcuSayisi + " Yolculu güzargah", yol,kar);
+                }else
+                {
+                    break;
+                }
+
             }
-            PathFinder findMyPath = new PathFinder(grafDugumler);
-            ArrayList<Node> yol = findMyPath.yolu_bul(baslangicPlaka,bitisPlaka);
-            yol.add(grafDugumler.get(baslangicPlaka -1));
-            new YoluGoster("Optimal 1",baslangicPlaka,bitisPlaka,yol);
+
         });
 
 
-        this.add(lbYolcu);
-        this.add(tfYolcuSayisi);
+        /*this.add(lbYolcu);
+        this.add(tfYolcuSayisi);*/
 
         this.add(lbBitis);
         this.add(tfBitisPlaka);

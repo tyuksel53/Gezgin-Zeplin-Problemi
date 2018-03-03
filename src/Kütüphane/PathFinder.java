@@ -123,13 +123,18 @@ public class PathFinder {
             String[] adim =  yol.get(i).replace("->"," ").split(" ");
             if(Integer.parseInt(adim[1]) == bitis)
             {
-                System.out.println(yol.get(i));
                 path.add(dugumler.get(Integer.parseInt(adim[1]) -1));
                 bitis = Integer.parseInt(adim[0]);
             }
         }
 
         return path;
+    }
+
+    public double gidilenMesafe(int hedefSehir)
+    {
+
+        return ilDeger.get(hedefSehir);
     }
 
 }
