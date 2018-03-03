@@ -1,11 +1,43 @@
 package Model;
 
+import Kütüphane.Portal;
+
+import javax.sound.sampled.Port;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Node {
 
     private int plakaKodu;
 
     private int[] komsuluklar;
 
+
+    private HashMap<Integer,Double> komsularVeDegerleri = new HashMap<Integer, Double>();
+
+    public HashMap<Integer, Double> getKomsularVeDegerleri() {
+        return komsularVeDegerleri;
+    }
+
+    public void setvalueKomsularVeDegerleri(int index,double val)
+    {
+        this.komsularVeDegerleri.put(index,val);
+    }
+    public void setKomsularVeDegerleri(ArrayList<Node> dugumler,int yolcuSayisi) {
+
+        for(int i=0;i<komsuluklar.length;i++)
+        {
+            if(Portal.getInstance().gidilebilirMi(this,dugumler.get( komsuluklar[i]-1),yolcuSayisi))
+            {
+                komsularVeDegerleri.put(komsuluklar[i],Portal.getInstance().mesafeyiBul(this,
+                        dugumler.get(komsuluklar[i] -1)));
+            }else
+            {
+                komsularVeDegerleri.put(komsuluklar[i],null); // zeplin gidememiş
+            }
+        }
+
+    }
 
     private int kordinatX;
     private int kordinatY;

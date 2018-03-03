@@ -88,7 +88,13 @@ public class Portal {
     }
 
 
-    public double mesafeyiBul(double lat1, double lon1, double lat2, double lon2) {
+    public double mesafeyiBul(Node suanki,Node hedef) {
+
+        double lat1 = suanki.getLatitude();
+        double lon1 = suanki.getLongitute();
+        double lat2 = hedef.getLatitude();
+        double lon2 = hedef.getLongitute();
+
         double theta = lon1 - lon2;
         double mesafe = Math.sin(derece_radyana(lat1)) * Math.sin(derece_radyana(lat2))
                 + Math.cos(derece_radyana(lat1)) *
@@ -99,6 +105,17 @@ public class Portal {
         mesafe = mesafe * 60 * 1.1515;
         mesafe = mesafe * 1.609344;
         return (mesafe);
+    }
+
+    public boolean gidilebilirMi(Node suankiKonum,Node hedefKonum,int yolucuSayisi)
+    {
+        double mesafe = mesafeyiBul(suankiKonum,hedefKonum);
+
+        double yukseklik = Math.abs( (hedefKonum.getAltitude() + 40) - suankiKonum.getAltitude() );
+
+        double atanValue = Math.toDegrees( Math.atan(  yukseklik / mesafe ) );
+
+        return (80 - yolucuSayisi) > Math.floor( (atanValue) ); /* koşula göre gidebilir */
     }
 
     private double radyan_dereceye(double rad) {

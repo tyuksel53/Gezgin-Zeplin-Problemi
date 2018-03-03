@@ -1,5 +1,6 @@
 package Ekran;
 
+import Kütüphane.PathFinder;
 import Kütüphane.Portal;
 import Model.Node;
 
@@ -42,14 +43,7 @@ public class GirisEkranı extends JFrame {
         JButton btnHesapla = new JButton("Hesapla");
         btnHesapla.setBounds(110,250,90,30);
 
-        btnHesapla.addActionListener(e -> {
-            ArrayList<Node> grafDugumler = new ArrayList<>();
-            Portal myPortal = Portal.getInstance();
 
-            grafDugumler = myPortal.dogumleriTanimla();
-            new YoluGoster("Optimal 1");
-
-        });
 
         JLabel lbBaslangic = new JLabel("Başlangıç şehrin plakası girin:");
         lbBaslangic.setBounds(25,10,200,50);
@@ -68,6 +62,23 @@ public class GirisEkranı extends JFrame {
 
         JTextField tfYolcuSayisi = new JTextField();
         tfYolcuSayisi.setBounds(25,210,175,30);
+
+        btnHesapla.addActionListener(e -> {
+            int baslangicPlaka = Integer.parseInt( tfBaslangicPlaka.getText() );
+            int bitisPlaka = Integer.parseInt( tfBitisPlaka.getText() );
+            int yolcuSayisi = Integer.parseInt(tfYolcuSayisi.getText());
+            ArrayList<Node> grafDugumler = new ArrayList<>();
+
+            grafDugumler = Portal.getInstance().dogumleriTanimla();
+            for(int i=0;i<grafDugumler.size();i++)
+            {
+                grafDugumler.get(i).setKomsularVeDegerleri(grafDugumler,yolcuSayisi);
+            }
+            PathFinder findMyPath = new PathFinder(grafDugumler);
+            findMyPath.yolu_bul(baslangicPlaka,bitisPlaka);
+            new YoluGoster("Optimal 1",baslangicPlaka,bitisPlaka);
+        });
+
 
         this.add(lbYolcu);
         this.add(tfYolcuSayisi);

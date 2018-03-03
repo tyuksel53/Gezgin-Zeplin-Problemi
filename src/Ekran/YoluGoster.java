@@ -6,7 +6,7 @@ import java.awt.event.MouseListener;
 
 public class YoluGoster extends JFrame {
 
-    public YoluGoster(String title)
+    public YoluGoster(String title,int baslangicPlaka,int bitisPlaka)
     {
         this.setTitle(title);
         this.setContentPane(new Harita());
