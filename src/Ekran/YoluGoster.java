@@ -35,7 +35,7 @@ public class YoluGoster extends JFrame {
 
 
         this.setSize(738,600);
-
+        this.setLocationRelativeTo(null);
         this.setLayout(null);
         this.setVisible(true);
 
