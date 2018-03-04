@@ -1,6 +1,16 @@
 # Gezgin-Zeplin-Problemi
 Programlama Lab. II, 2017-2018 Bahar Proje I
 
+## Ekran Görüntüsü
+
+### Problem 1
+
+![](/problem%201.gif)
+
+### Problem 2
+
+![](/problem%202.gif)
+
 **Giriş:** En kısa yol problemi, bir ba¸slangıç dugum¨unden bir bitii dugumune en az maliyeti olan yolu bulma problemidir.
 
 Bir nakliye firmasının en az maliyetli taşıma ağını yapması, bir kargo firmasının en az
