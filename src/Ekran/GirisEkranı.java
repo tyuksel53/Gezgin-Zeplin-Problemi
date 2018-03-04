@@ -2,11 +2,16 @@ package Ekran;
 
 import Kütüphane.PathFinder;
 import Kütüphane.Portal;
+import Model.Güzargah;
 import Model.Node;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 
 public class GirisEkranı extends JFrame {
 
@@ -40,50 +45,53 @@ public class GirisEkranı extends JFrame {
 
 
         //components
-        JButton btnHesapla = new JButton("Hesapla");
-        btnHesapla.setBounds(110,250,90,30);
+        JButton btnProblem1 = new JButton("Problem 1");
+        btnProblem1.setBounds(130,180,95,30);
 
-
+        JButton btnProblem2 = new JButton("Problem 2");
+        btnProblem2.setBounds(25,180,95,30);
 
         JLabel lbBaslangic = new JLabel("Başlangıç şehrin plakası girin:");
-        lbBaslangic.setBounds(25,10,200,50);
+        lbBaslangic.setBounds(25,10,225,50);
 
         JTextField tfBaslangicPlaka = new JTextField();
-        tfBaslangicPlaka.setBounds(25,50,175,30);
+        tfBaslangicPlaka.setBounds(25,50,200,30);
 
         JLabel lbBitis = new JLabel("Bitiş şehrin plakası girin:");
-        lbBitis.setBounds(25,90,200,50);
+        lbBitis.setBounds(25,90,225,50);
 
         JTextField tfBitisPlaka = new JTextField();
-        tfBitisPlaka.setBounds(25,130,175,30);
+        tfBitisPlaka.setBounds(25,130,200,30);
 
-/*        JLabel lbYolcu = new JLabel("Yolcu sayisini girin:");
-        lbYolcu.setBounds(25,170,200,50);
 
-        JTextField tfYolcuSayisi = new JTextField();
-        tfYolcuSayisi.setBounds(25,210,175,30);*/
-
-        btnHesapla.addActionListener(e -> {
+        btnProblem1.addActionListener(e -> {
+            Portal.getInstance().problem1_dosyalari_sil();
             int baslangicPlaka = Integer.parseInt( tfBaslangicPlaka.getText() );
             int bitisPlaka = Integer.parseInt( tfBitisPlaka.getText() );
-            /*int yolcuSayisi = Integer.parseInt(tfYolcuSayisi.getText());*/
-            ArrayList<Node> grafDugumler = new ArrayList<>();
 
-            grafDugumler = Portal.getInstance().dogumleriTanimla();
+            ArrayList<Node> grafDugumler  = Portal.getInstance().dogumleriTanimla();
+            ArrayList<Güzargah> güzargahlar = new ArrayList<>();
             for(int yolcuSayisi=5;yolcuSayisi<50;yolcuSayisi++)
             {
                 for(int i=0;i<grafDugumler.size();i++)
                 {
                     grafDugumler.get(i).setKomsularVeDegerleri(grafDugumler,yolcuSayisi);
                 }
+
                 PathFinder findMyPath = new PathFinder(grafDugumler);
                 ArrayList<Node> yol = findMyPath.yolu_bul(baslangicPlaka,bitisPlaka);
+
                 if(yol.size() != 0)
                 {
-                    double tutar = (findMyPath.gidilenMesafe(bitisPlaka) / 100) * 1000;
+                    /*dosyaya yazma işlemi*/
+                    Portal.getInstance().problem1_dosyaya_yaz(grafDugumler,yolcuSayisi);
+
+                    double gidilenMesafe = findMyPath.gidilenMesafe(bitisPlaka);
+                    double tutar = (gidilenMesafe / 100) * 1000;
                     double kar = yolcuSayisi * 20 - tutar;
                     yol.add(grafDugumler.get(baslangicPlaka -1));
-                    new YoluGoster(""+yolcuSayisi + " Yolculu güzargah", yol,kar);
+                    Güzargah güzargah = new Güzargah(gidilenMesafe,yol.size(),yolcuSayisi,kar,yol);
+                    güzargahlar.add(güzargah);
                 }else
                 {
                     break;
@@ -91,21 +99,60 @@ public class GirisEkranı extends JFrame {
 
             }
 
+            Collections.sort(güzargahlar, new Comparator<Güzargah>() {
+                @Override
+                public int compare(Güzargah z1, Güzargah z2) {
+                    if (z1.kar > z2.kar)
+                        return -1;
+                    if (z1.kar < z2.kar)
+                        return 1;
+                    return 0;
+                }
+            });
+
+
+            if(güzargahlar.size() == 0)
+            {
+                JOptionPane.showMessageDialog(null,"Yol bulunamadı");
+                return;
+            }
+
+            /* güzargahları filtreleme işlemei */
+            HashMap<Double,Double> check = new HashMap<>();
+            ArrayList<Güzargah> basitleştirilmisGüzargahlar = new ArrayList<>();
+
+            for(int i=0;i<güzargahlar.size();i++)
+            {
+                Güzargah suankiGüzargah = güzargahlar.get(i);
+                if(check.get(suankiGüzargah.gidelenMesafe) == null)
+                {
+                    check.put(suankiGüzargah.gidelenMesafe,suankiGüzargah.kar);
+                    basitleştirilmisGüzargahlar.add(suankiGüzargah);
+
+                }
+            }
+
+            /* son olarak en iyi kardan , en kötü kara doğru güzargahların listelenmesi */
+            int counter=0;
+            for(int i=basitleştirilmisGüzargahlar.size()-1;i>=0;i--)
+            {
+                Güzargah suankiGüzargah = basitleştirilmisGüzargahlar.get(i);
+                counter++;
+                new YoluGoster(""+counter+". Güzargah - Yolcu sayisi: "+suankiGüzargah.yolcuSayisi
+                        , suankiGüzargah.dugumler,suankiGüzargah.kar);
+            }
         });
 
 
-        /*this.add(lbYolcu);
-        this.add(tfYolcuSayisi);*/
-
         this.add(lbBitis);
         this.add(tfBitisPlaka);
-
+        this.add(btnProblem2);
         this.add(tfBaslangicPlaka);
         this.add(lbBaslangic);
 
-        this.add(btnHesapla);
+        this.add(btnProblem1);
 
-        this.setSize(255,330);
+        this.setSize(263,300);
         this.setLocationRelativeTo(null);
         this.setLayout(null);
         this.setVisible(true);
