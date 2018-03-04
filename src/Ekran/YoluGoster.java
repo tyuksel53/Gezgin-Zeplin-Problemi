@@ -11,43 +11,30 @@ import java.util.ArrayList;
 
 public class YoluGoster extends JFrame {
 
-    public YoluGoster(String title, ArrayList<Node> yol,double kar)
+    public YoluGoster(String title, ArrayList<Node> yol,String aciklama)
     {
         this.setTitle(title);
         this.setContentPane(new Harita(yol));
+        String[] aciklamalar = aciklama.split("_");
 
-        NumberFormat formatter = new DecimalFormat("#0.00");
-        JLabel kartxt = new JLabel("Elde Edilen kar: " + formatter.format(kar));
-        kartxt.setBounds(500,400,200,100);
-        this.add(kartxt);
-        this.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
+        JLabel gidilenMesafe = new JLabel(aciklamalar[0]);
+        gidilenMesafe.setBounds(10,400,200,30);
+        this.add(gidilenMesafe);
 
-            }
+        JLabel tutar = new JLabel(aciklamalar[1]);
+        tutar.setBounds(10,430,200,30);
+        this.add(tutar);
 
-            @Override
-            public void mousePressed(MouseEvent e) {
+        JLabel yolcuSayisi = new JLabel(aciklamalar[2]);
+        yolcuSayisi.setBounds(10,460,200,30);
+        this.add(yolcuSayisi);
 
-            }
+        JLabel kar = new JLabel(aciklamalar[3]);
+        kar.setBounds(10,490,700,30);
+        this.add(kar);
 
-            @Override
-            public void mouseReleased(MouseEvent e) {
 
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
-
-        this.setSize(738,500);
+        this.setSize(738,600);
 
         this.setLayout(null);
         this.setVisible(true);

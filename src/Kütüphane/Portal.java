@@ -137,6 +137,16 @@ public class Portal {
                 System.out.println("Dosya silinemedi "+file);
             }
         }
+
+        directory = new File("dosyaCiktisi/problem2");
+        files = directory.listFiles();
+        for (File file : files)
+        {
+            if (!file.delete())
+            {
+                System.out.println("Dosya silinemedi "+file);
+            }
+        }
     }
     public void problem1_dosyaya_yaz(ArrayList<Node> dugumler,int yolcuSayisi)
     {
@@ -157,6 +167,42 @@ public class Portal {
             {
                 if(currentNode.getKomsularVeDegerleri()
                     .get(currentNode.getKomsuluklar()[j]) == null)
+                {
+                    komsuluklar = komsuluklar + "null,";
+                }else
+                {
+                    komsuluklar = komsuluklar +formatter.format(currentNode.getKomsularVeDegerleri()
+                            .get(currentNode.getKomsuluklar()[j])) + ",";
+                }
+
+            }
+            komsuluklar = komsuluklar.substring(0,komsuluklar.length()-1);
+
+            writer.println("" + currentNode.getPlakaKodu() + "," + currentNode.getLatitude() +
+                    "," + currentNode.getLongitute() + "," + komsuluklar);
+        }
+        writer.close();
+    }
+
+    public void problem2_dosyaya_yaz(ArrayList<Node> dugumler,int yolcuSayisi)
+    {
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter("dosyaCiktisi/problem2/lat-long-komsuluklar-yolcusayisi-"+yolcuSayisi+".txt", "UTF-8");
+        } catch (Exception ex) {
+            System.out.println("Dosya açılamadı");
+        }
+        writer.println();
+        writer.println("plaka,lat,long,komsu1,komsu2,komsu3.....");
+        for(int i=0;i<dugumler.size();i++)
+        {
+            Node currentNode = dugumler.get(i);
+            String komsuluklar = "";
+            NumberFormat formatter = new DecimalFormat("#0.00");
+            for(int j=0;j<currentNode.getKomsuluklar().length;j++)
+            {
+                if(currentNode.getKomsularVeDegerleri()
+                        .get(currentNode.getKomsuluklar()[j]) == null)
                 {
                     komsuluklar = komsuluklar + "null,";
                 }else
